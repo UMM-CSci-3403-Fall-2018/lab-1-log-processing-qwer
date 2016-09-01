@@ -2,7 +2,7 @@
 
 # Create a temporary scratch directory for the shell script to work in.
 setup() {
-  BATS_TMPDIR=`gmktemp --directory`
+  BATS_TMPDIR=`mktemp --directory`
   mkdir $BATS_TMPDIR/discovery
   mkdir $BATS_TMPDIR/velcro
   tar -zxf log_files/discovery_secure.tgz --directory $BATS_TMPDIR/discovery
