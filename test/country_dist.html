@@ -1,0 +1,27 @@
+	<!-- ++++++++++++ START OF COUNTRY HEADER +++++++++++++++++++++++++++++++ -->
+	
+	google.setOnLoadCallback(drawCountryDistribution);
+
+	function drawCountryDistribution() {
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Country');
+		data.addColumn('number', 'Number of failed logins');
+
+	<!-- ++++++++++++ END OF COUNTRY HEADER +++++++++++++++++++++++++++++++ -->
+data.addRow(['BR', 4]);
+data.addRow(['CN', 595]);
+data.addRow(['DE', 13]);
+data.addRow(['FR', 8]);
+data.addRow(['IN', 12]);
+data.addRow(['KR', 24]);
+data.addRow(['RO', 4]);
+data.addRow(['RU', 12]);
+data.addRow(['TW', 4]);
+data.addRow(['US', 29]);
+	<!-- ++++++++++++ START OF COUNTRY FOOTER +++++++++++++++++++++++++++++++ -->
+
+		var chart = new google.visualization.GeoChart(document.getElementById('country_dist_div'));
+		chart.draw(data, {width: 800, height: 500, title: 'Failed logins by country'});
+	}
+
+	<!-- ++++++++++++ END OF COUNTRY FOOTER +++++++++++++++++++++++++++++++ -->
