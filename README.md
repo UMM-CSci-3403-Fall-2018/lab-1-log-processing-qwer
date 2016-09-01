@@ -95,14 +95,14 @@ The repository that we give you contains log file data along with tests for each
 
 :ALERT: Whenever you run a script or test, you should do so from the main project directory, since that's what the tests will do. If you want to run this from your project directory, you'll need all your shell scripts to be visible on your path. You don't want to permanently add this randomly located bin directory to your path, so we recommend temporarily adding it to your path in a shell instead of adding it in your .bashrc file. To do this go to your project directory (the directory containing things like `bin` and `log_files`) and execute
 
-```bash
-% export PATH=$PATH:`pwd`/bin
+```
+export PATH=$PATH:`pwd`/bin
 ```
 
 This will add the bin directory for this project (that's what the ``` `pwd` ``` is doing for you) to your path, which means that in that terminal you should be able to run your scripts using just (for example)
 
 ```
-% wrap_contents.sh blah blah blah
+wrap_contents.sh blah blah blah
 ```
 
 without needing the `./` business or having to put `/bin/bash` at the front of things.
@@ -133,7 +133,7 @@ There are obviously many different ways to solve this problem, but we propose th
 
 ### Top-level `process_logs.sh`
 
-We'll start our description with a "top-level" script `process_logs.sh` which is what you call to "run the program". This is _not_ where you should start the programming, though, because this won't work until all the helper scripts are written. So we'll describe it top-down, but you should probably write it bottom-up.
+We'll start our description with a "top-level" script `process_logs.sh` which is what you call to "run the program". This is _not_ where you should start the programming, though, because this won't work until all the helper scripts are written. So we'll describe it top-down, but you should probably write the "helper" scripts (described below) first, and save `process_logs` for last.
 
 `process_logs.sh` takes a set of gzipped tar files on the command line, e.g., 
 
