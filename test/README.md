@@ -8,6 +8,9 @@ For example, you should have `wrap_contents.sh` in your `bin` directory,
 and there ought to be a `wrap_contents.bats` test file here that will
 test that script.
 
+There are also some sub-directories containing test data used by the `bats`
+tests. You should leave those alone or you might end up breaking the tests.
+
 We should provide a reasonable collection of test scripts, so you shouldn't
 have to add or modify anything here. If you wish to extend any of the tests,
 however, to handle cases we missed, feel free to do so. It would be great if
