@@ -242,7 +242,7 @@ It then:
   extracting the contents of each file we were given.
   * The set of files to work with for the lab are in the `log_files`
     directory of your project.
-  * Our solution extracts the archive contents into a directory (in the
+  * Our solution extracts the contents of each archive into a directory (in the
     scratch directory) with the same name as the client in the temporary
     directory. Thus when you extract the contents of `zeus_secure.tgz` you'd
     want to put the results in a directory called `zeus` in your scratch
@@ -380,7 +380,7 @@ and extract the five columns we need. Our solution had the following steps:
 We used plain old `cat` for step 2.
 
 Step 3 is 90% of the work, and we used `awk` for that. (You could use a
-combination of `gred` and `sed`, but `awk` can do it in one step.) You need two
+combination of `grep` and `sed`, but `awk` can do it in one step.) You need two
 different patterns to capture the two kinds of lines described above, and
 because one is a subset of the other, it's important to include the negation of
 the first test in the second or you'll end up with a bunch of double counting.
