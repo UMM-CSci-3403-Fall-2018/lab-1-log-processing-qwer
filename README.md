@@ -554,7 +554,7 @@ should see a geo chart showing the distribution of countries where attacks came
 from. If you have a directory set up for hand testing as discussed above in the
 previous two parts, you should be able to use that here as well.
 
-### Write assemble_report.sh
+### Write `assemble_report.sh`
 
 Like the previous three scripts, this script again takes a directory name as its
 sole command line argument. That directory is assumed to contain the three files
@@ -566,10 +566,17 @@ you've generated above:
 
 It collects together the contents of those files (we used `cat`) and then uses
 `wrap_contents.sh` to add the overall HTML header and footer, writing the
-results to `failed_login_summary.html`. If you open that file in a reasonably
-modern browser, you should see three cool graphs like in the example above. If
-one or more of your graphs is missing or blank, you might find it useful to open
-the JavaScript console in your browser so you can see the error messages.
+results to `failed_login_summary.html` in your scratch directory.
+If you open that file in a reasonably modern browser, you should see three cool
+graphs like in the example above. If one or more of your graphs is missing or
+blank, you might find it useful to open the JavaScript console in your browser
+so you can see the error messages.
+
+### Now write `process_logs.sh`
+
+You now have all the pieces in place, and can go back and write [the
+top-level `process_logs.sh` script](#top-level-process-logssh) that ties
+everything together!
 
 ## Final thoughts
 
