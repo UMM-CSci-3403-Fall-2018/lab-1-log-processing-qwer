@@ -498,7 +498,9 @@ in the top of your project directory.
 Also, as before, you can test this by wrapping the resulting file with the
 overall header and footer, and then loading it up in your browser. If all is
 well, you should see a column chart showing the distribution of hours when
-failed logins occurred.
+failed logins occurred. If you have a directory set up for hand testing as
+discussed above in "Write `create_username_dist.sh`", you should be able to
+use that here as well.
 
 ### Write `create_country_dist.sh`
 
@@ -543,13 +545,14 @@ extracted all the IP addresses (just like we extracted the usernames earlier),
 then the command `join` (try `man join` for more) can be used to attach the
 country code to each of the lines in your IP address file. Then you can extract
 the country codes, count their occurrences (like we counted usernames before),
-and generate the necessary `data.addRow` lines. Remember to then wrap those with
-the appropriate header and footer, and you're done with this part.
+and generate the necessary `data.addRow` lines, which again look like `data.addRow(['04', 87]);`. Remember to then wrap those with the appropriate
+header and footer, and you're done with this part.
 
 Again, that you can test the output for this by wrapping it with the overall
 header and footer, and then loading it up in your browser. If all is well, you
 should see a geo chart showing the distribution of countries where attacks came
-from.
+from. If you have a directory set up for hand testing as discussed above in the
+previous two parts, you should be able to use that here as well.
 
 ### Write assemble_report.sh
 
