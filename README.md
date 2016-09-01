@@ -54,58 +54,10 @@ questions when you get stuck!
 
 ### `bats` acceptance tests
 
-In this lab we're going to use Aruba as a behavior-driven development (BDD) tool
-for shell scripts. Aruba is an extension for <a
-href="http://cukes.info/">Cucumber</a>, a Ruby-based BDD tool, but Aruba is
-specifically aimed at testing shell scripts. A Cucumber test suite consists of
-feature files which explain the intended behavior in English, along with steps
-files which translate the feature file into actual tests. The feature files
-should be easily readable, but the steps files won't necessarily make a lot of
-sense; they're written in Ruby and most of our steps are offloaded to internal
-Aruba functions to do the actual tests. The feature files should be readable and
-will hopefully be helpful in providing feedback as you develop your scripts, but
-it's not necessary or important for you to read or make sense of the steps
-files.
-
-As an example of an Aruba feature file, a subset of `process_client_logs.feature` is
-
-```
-  Scenario: summarize a single client's log files
-    Given a random directory DIR
-    And DIR contains the result of expanding the tarball of log files "mylar_secure.tgz"
-    When I successfully run the command `process_client_logs.sh DIR`
-    Then the results file "DIR/failed_login_data.txt" exists
-    And the results file "DIR/failed_login_data.txt" contains "Aug 14 06 gt05 218.2.129.13"
-    And the results file "DIR/failed_login_data.txt" contains "Jul 13 02 db2inst1 121.88.249.94"
-    And the results file "DIR/failed_login_data.txt" contains "Jul 9 05 root 59.108.33.66"
-    And the results file "DIR/failed_login_data.txt" has 461 lines
-```
-
-When working on the labs that use these kinds of tests, you can typically ignore the "Given" and "When" lines; they're essentially setting things up for the test (e.g., making sure all the files are in the right place) and then running one or more of your shell scripts, and we'll make sure they pass. The "Then" lines (and subsequent "And" lines) are the interesting ones, because they indicate what is expected, i.e., what your script is supposed to accomplish. In this case, for example, your `process_client_logs.sh` script should create a file `failed_login_data.txt` in the appropriate directory that contains 461 lines, a few of which are specifically checked for.
-
-The steps file tells Aruba/Cucumber how to convert these English-language assertions into executable tests; the details of the steps file tend to use a non-trivial amount of Ruby/Cucumber/Aruba voodoo, so feel free to ignore them, especially at the beginning.
-
-To run an Aruba test, navigate to the main project directory and type either
-
-```
-cucumber
-```
-
-to run all the tests, or
-
-```
-cucumber features/file_you_are_testing.feature
-```
-
-to just run the tests for a particular feature you want to test at the moment. So, for example, if you want to just test `process_client_logs.sh`, you could run:
-
-```
-cucumber features/process_client_logs.feature
-```
-
-Use `ls features/*.feature` to see all the feature files that we provided with the project.
-
-When you run the test, you should see the feature file with the scenario and each of the steps of that scenario. If a step is green the related test passed. If a step is red the related test failed, and hopefully there should be an error message from a shell command in the vicinity. If a step is dark blue it was skipped (because an earlier test failed). The light blue lines indicate shell commands that are being executed by the test code.
+We've provided a collection of `bats` acceptance tests (the files ending in
+`.bats` in `test`) for each of the scripts. You probably want to make sure
+the tests for a helper script (e.g., `create_country_dist.sh`) pass before
+you start working on a higher level script like `process_logs.sh`.
 
 ### Fork, clone, and share the project
 
@@ -249,11 +201,14 @@ It then:
     directory. Having each in their own directory is important so you can
     keep the logs from different machines from getting mixed up with each other.
 * Calls `process_client_logs.sh` on each client's set of logs to generate a
-  set of temporary, intermediate files that are documented below.
+  set of temporary, intermediate files that are documented below. This needs to
+  happen once for every set of client logs; you can just do it in the same
+  loop that does the extraction above.
 * Calls `create_username_dist.sh` which reads the intermediate files and
   generates the subset of an HTML/JavaScript document that uses Google's
   charting tools to create a pie chart showing the usernames with the most
-  failed logins.
+  failed logins. This and the following steps only need to happen once, and thus
+  should _not_ be in the extraction/processing loop.
 * Calls `create_hours_dist.sh` which reads the intermediate files and
   generates the subset of an HTML/JavaScript document that uses Google's
   charting tools to create a column chart showing the hours of the day with
@@ -543,9 +498,15 @@ The one interesting difference, then, between this and `create_username_dist.sh`
 is the need to convert IP addresses into country codes. Assuming you've
 extracted all the IP addresses (just like we extracted the usernames earlier),
 then the command `join` (try `man join` for more) can be used to attach the
-country code to each of the lines in your IP address file. Then you can extract
-the country codes, count their occurrences (like we counted usernames before),
-and generate the necessary `data.addRow` lines, which again look like `data.addRow(['04', 87]);`. Remember to then wrap those with the appropriate
+country code to each of the lines in your IP address file. :exclamation:
+Sorting is really important for `join` to work correctly, so read the
+documentation carefully and play with it by hand some so you understand how it
+works.
+
+After you've converted IP addresses to country codes, you can extract the
+country codes, count their occurrences (like we counted usernames before), and
+generate the necessary `data.addRow` lines, which again look like
+`data.addRow(['04', 87]);`. Remember to then wrap those with the appropriate
 header and footer, and you're done with this part.
 
 Again, that you can test the output for this by wrapping it with the overall
