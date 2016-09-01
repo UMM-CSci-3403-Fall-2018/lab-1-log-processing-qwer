@@ -18,26 +18,26 @@ teardown() {
 
 # If this test fails, your script file doesn't exist, or there's
 # a typo in the name, or it's in the wrong directory, etc.
-@test "bin/create_username_dist.sh exists" {
-  [ -f "bin/create_username_dist.sh" ]
+@test "bin/create_hours_dist.sh exists" {
+  [ -f "bin/create_hours_dist.sh" ]
 }
 
 # If this test fails, your script isn't executable.
-@test "bin/create_username_dist.sh is executable" {
-  [ -x "bin/create_username_dist.sh" ]
+@test "bin/create_hours_dist.sh is executable" {
+  [ -x "bin/create_hours_dist.sh" ]
 }
 
 # If this test fails, your script either didn't run at all, or it
 # generated some sort of error when it ran.
-@test "bin/create_username_dist.sh runs successfully" {
-  run bin/create_username_dist.sh $BATS_TMPDIR
+@test "bin/create_hours_dist.sh runs successfully" {
+  run bin/create_hours_dist.sh $BATS_TMPDIR
   [ "$status" -eq 0 ]
 }
 
 # If this test fails, your script didn't generate the correct HTML
-# for the pie chart for the username data from discovery and velcro.
-@test "bin/create_username_dist.sh generates correct simple output" {
-  run bin/create_username_dist.sh $BATS_TMPDIR
-  run diff -wbB test/username_dist.html $BATS_TMPDIR/username_dist.html
+# for the bar chart for the hour data from discovery and velcro.
+@test "bin/create_hours_dist.sh generates correct simple output" {
+  run bin/create_hours_dist.sh $BATS_TMPDIR
+  run diff -wbB test/hours_dist.html $BATS_TMPDIR/hours_dist.html
   [ "$status" -eq 0 ]
 }

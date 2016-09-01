@@ -1,0 +1,34 @@
+	<!-- ++++++++++++ START OF HOURS HEADER +++++++++++++++++++++++++++++++ -->
+	
+	google.setOnLoadCallback(drawHoursDistribution);
+
+	function drawHoursDistribution() {
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Hour of the day');
+		data.addColumn('number', 'Number of failed logins');
+
+	<!-- ++++++++++++ END OF HOURS HEADER +++++++++++++++++++++++++++++++ -->
+data.addRow(['00', 8]);
+data.addRow(['01', 20]);
+data.addRow(['02', 4]);
+data.addRow(['04', 12]);
+data.addRow(['06', 247]);
+data.addRow(['07', 245]);
+data.addRow(['08', 95]);
+data.addRow(['10', 4]);
+data.addRow(['11', 8]);
+data.addRow(['12', 12]);
+data.addRow(['13', 16]);
+data.addRow(['15', 4]);
+data.addRow(['17', 4]);
+data.addRow(['18', 5]);
+data.addRow(['19', 4]);
+data.addRow(['20', 9]);
+data.addRow(['23', 8]);
+	<!-- ++++++++++++ START OF HOURS FOOTER +++++++++++++++++++++++++++++++ -->
+
+		var chart = new google.visualization.ColumnChart(document.getElementById('hours_dist_div'));
+		chart.draw(data, {width: 800, height: 550, title: 'Failed logins by hour of the day'});
+	}
+
+	<!-- ++++++++++++ END OF HOURS FOOTER +++++++++++++++++++++++++++++++ -->

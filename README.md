@@ -465,7 +465,12 @@ a hex code of 27. So a string like `"it\x27s"` will give you `"it's"`.
 Note that you can test the file that this script generates by wrapping it with
 the overall header and footer, and then loading it up in your browser. If all is
 well, you should see a pie chart showing the distribution of usernames that were
-attacked.
+attacked. Running it on its own requires that you have a directory with all the
+right pieces in it, though, which isn't entirely trivial to set up. The body
+of the `setup()` function in the `bats` test (`create_username_dist.bats`)
+sets up exactly such a directory for the automatic tests, so you can use
+that sequence of instructions to guide the construction of your own test
+directory.
 
 ### Write `create_hours_dist.sh`
 
