@@ -33,7 +33,9 @@ teardown() {
 # If this test fails, your script didn't generate the correct output
 # for the logs for discovery.
 @test "bin/process_client_logs.sh generates correct simple output" {
-  run bin/process_client_logs.sh $BATS_TMPDIR/discovery
-  run diff -wbB test/discovery_failed_login_data.txt $BATS_TMPDIR/discovery/failed_login_data.txt
+  bin/process_client_logs.sh $BATS_TMPDIR/discovery
+  sort $BATS_TMPDIR/discovery/failed_login_data.txt > $BATS_TMPDIR/discovery_sorted.txt
+  sort test/discovery_failed_login_data.txt > $BATS_TMPDIR/test_sorted.txt
+  run diff -wbB $BATS_TMPDIR/test_sorted.txt $BATS_TMPDIR/discovery_sorted.txt
   [ "$status" -eq 0 ]
 }
