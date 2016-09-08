@@ -26,7 +26,10 @@ teardown() {
 # If this test fails, your script didn't generate the correct HTML
 # for the bar chart for the hour data from discovery and velcro.
 @test "bin/process_logs.sh generates correct simple output" {
-  run bin/process_logs.sh log_files/*_secure.tgz
-  run diff -wbB test/summary_plots.html failed_login_summary.html
+  bin/process_logs.sh log_files/*_secure.tgz
+  BATS_TMPDIR=`mktemp --directory`
+  sort test/summary_plots.html > $BATS_TMPDIR/target.txt
+  sort failed_login_summary.html > $BATS_TMPDIR/sorted.txt
+  run diff -wbB $BATS_TMPDIR/target.txt $BATS_TMPDIR/sorted.txt
   [ "$status" -eq 0 ]
 }
