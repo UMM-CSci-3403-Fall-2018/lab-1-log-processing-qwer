@@ -77,7 +77,7 @@ directory structure we provide includes:
 * `bin`: This is where you should put the shell scripts you write. The `bats`
    tests will assume your scripts are there (and executable) and will fail if
    they aren't.
-* `tests`: This contains the `bats` tests you will be using to test each step
+* `test`: This contains the `bats` tests you will be using to test each step
    of the lab. In theory you shouldn't need to change anything in this
    directory. You're welcome to extend the tests, but please don't change
    them without reason.
@@ -291,10 +291,10 @@ the IP address the failed attempt came from. These five pieces of information
 are enough to let us create the desired graphs.
 
 A simple set of `bats` tests for this script are located in
-`tests/process_client_logs.bats`. To run them just type
+`test/process_client_logs.bats`. To run them just type
 
 ```bash
-bats tests/process_client_logs.bats
+bats test/process_client_logs.bats
 ```
 
 in the top of your project directory.
@@ -361,10 +361,10 @@ placing the results in the file `username_dist.html` in the directory given on
 the command line.
 
 A simple set of `bats` tests for this script are located in
-`tests/create_username_dist.bats`. To run them just type
+`test/create_username_dist.bats`. To run them just type
 
 ```bash
-bats tests/create_username_dist.bats
+bats test/create_username_dist.bats
 ```
 
 in the top of your project directory.
@@ -442,10 +442,10 @@ happened in that hour. The hour is a two character string representing the hour
 in military or 24-hour time, i.e., 10pm is '22'.
 
 Again, a simple set of `bats` tests for this script are located in
-`tests/create_hours_dist.bats`. To run them just type
+`test/create_hours_dist.bats`. To run them just type
 
 ```bash
-bats tests/create_hours_dist.bats
+bats test/create_hours_dist.bats
 ```
 
 in the top of your project directory.
