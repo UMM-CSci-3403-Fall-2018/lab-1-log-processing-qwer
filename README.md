@@ -220,6 +220,8 @@ It then:
 * Calls `assemble_report.sh` which pulls the results from the previous
   three scripts into a single HTML/JavaScript document that generates the
   three desired plots in a single page.
+* Moves the resulting `failed_login_summary.html` file from the scratch
+  directory back up to the directory where `process_logs.sh` was called.
 
 We'll use the `wrap_contents.sh` you wrote in [the
 pre-lab](https://github.com/UMM-CSci-Systems/Log-processing-pre-lab) to simplify
