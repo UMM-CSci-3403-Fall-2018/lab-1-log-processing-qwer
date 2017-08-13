@@ -96,30 +96,6 @@ directory structure we provide includes:
    are here.
 * `examples`: Contains some example files.
 
-:ALERT: Whenever you run a script or test, you should do so from the main
-project directory, since that's what the tests will do. If you want to run this
-from your project directory, you'll need all your shell scripts to be visible on
-your path. You don't want to permanently add this randomly located bin directory
-to your path, so we recommend temporarily adding it to your path in a shell
-instead of adding it in your .bashrc file. To do this go to your project
-directory (the directory containing things like `bin` and `log_files`) and
-execute
-
-```
-export PATH=$PATH:`pwd`/bin
-```
-
-This will add the bin directory for this project (that's what the ``` `pwd` ```
-is doing for you) to your path, which means that in that terminal you should be
-able to run your scripts using just (for example)
-
-```
-wrap_contents.sh blah blah blah
-```
-
-without needing the `./` business or having to put `/bin/bash` at the front of
-things.
-
 ### Structure of HTML/JavaScript file
 
 Based on the documentation and examples on the [Google
