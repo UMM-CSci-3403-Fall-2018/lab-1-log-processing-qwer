@@ -1,6 +1,6 @@
 # Log processing
 
-* [Overview](#Overview)
+* [Overview](#overview)
 * [Project setup](#project-setup)
    * [`bats` acceptance tests](#bats-acceptance-tests)
    * [Fork, clone, and share the project](#fork-clone-and-share-the-project)
