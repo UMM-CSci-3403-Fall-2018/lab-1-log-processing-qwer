@@ -518,7 +518,7 @@ so you can see the error messages.
 ### Now write `process_logs.sh`
 
 You now have all the pieces in place, and can go back and write [the
-top-level `process_logs.sh` script](#top-level-process-logssh) that ties
+top-level `process_logs.sh` script](#top-level-process_logssh) that ties
 everything together!
 
 ## Final thoughts
