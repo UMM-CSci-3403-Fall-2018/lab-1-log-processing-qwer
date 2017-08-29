@@ -3,34 +3,40 @@
 * [Overview](#overview)
 * [Project setup](#project-setup)
    * [`bats` acceptance tests](#bats-acceptance-tests)
-   * [Fork, clone, and share the project](#fork-clone-and-share-the-project)
+   * [Working with the team repository](#working-with-the-team-repository)
    * [Directory structure](#directory-structure)
-   * [Structure of HTML/JavaScript file](#structure-of-htmljavascript)
-* [Outline of our solution](#outline-of-our-solution)
-   * [Top-level `process_logs.sh`](#top-level-process-logssh)
-   * [Write `process_client_logs.sh`](#write-process-client-logssh)
-   * [Write `create_username_dist.sh`](#write-create-username-distsh)
-   * [Write `create_hours_dist.sh`](#write-create-hours-distsh)
-   * [Write `create_country_dist.sh`](#write-create-country-distsh)
-   * [Write `assemble_report.sh`](#write-assemble-reportsh)
+   * [Structure of HTML/JavaScript file](#structure-of-htmljavascript-file)
+* [Outline of our solution](#the-outline-of-our-solution)
+   * [Top-level `process_logs.sh`](#top-level-process_logssh)
+   * [Write `process_client_logs.sh`](#write-process_client_logssh)
+   * [Write `create_username_dist.sh`](#write-create_username_distsh)
+   * [Write `create_hours_dist.sh`](#write-create_hours_distsh)
+   * [Write `create_country_dist.sh`](#write-create_country_distsh)
+   * [Write `assemble_report.sh`](#write-assemble_reportsh)
 * [Final thoughts](#final-thoughts)
 * [What to turn in](#what-to-turn-in)
 
 ## Overview
 
 This lab is an example of a very common system administration task: Processing
-log files. Most modern operating systems collect generate a *lot* of logging
+log files. Most modern operating systems generate a *lot* of logging
 information but, sadly, most of it is ignored, in part because of the huge
-quantity generated. A common way of (partially) dealing with the volume of
-logging is to write scripts that sift through the logs looking for particular
-patterns or summarizing behaviors of interest. (This idea of using log analysis
+quantity generated. A common way of (partially) dealing with this mass of data 
+is to write scripts that sift through the logs looking for particular
+patterns and/or summarizing behaviors of interest. (This idea of using log analysis
 for this lab was suggested by John Wagener, a UMM CSci alum who does this kind
 of processing in his work in security analysis.)
 
-In this lab we'll be given a number of (old) `secure` log files from several of
-the lab machines. Linux logs essentially anything to do with authentication in
-`secure`, so these files contain both successful and unsuccessful login
-attempts. We're going to focus on summarizing the unsuccessful login attempts,
+In this lab we will be given a number of (old) `secure` log files from several of
+the lab machines. Our lab uses Redhat Linux and, at the time, essentially anything 
+to do with authentication was store in `/var/log/secure`.  Debian systems used 
+a different, but similar file named `auth.log` and newer Linux systems using `systemd` require 
+the use of a special command called `journalctl` to extract that same information.  However, 
+even if the security information is not stored in one file, per se, the extracted data
+has the same format as the old `/var/log/secure` files, so this type of processing remains relevant.
+
+The `secure` files contain both successful and unsuccessful login
+attempts.  We're going to focus on summarizing the unsuccessful login attempts,
 most of which are clearly attempts by hackers to gain access through improperly
 secured accounts. You'll write a collection of shell scripts that go through
 each of the log files, extract the relevant information, and generate HTML and
@@ -47,7 +53,7 @@ here</a> to see what your graphs might look like.
 
 Be warned, this is going to be a fairly complex lab with a lot of new
 technologies, and for some may prove one of the most challenging labs of the
-semester. Come prepared, work well together, work smart, and ask lots of
+semester! Come prepared, work well together, work smart, and ask lots of
 questions when you get stuck!
 
 ## Project setup
@@ -59,14 +65,12 @@ We've provided a collection of `bats` acceptance tests (the files ending in
 the tests for a helper script (e.g., `create_country_dist.sh`) pass before
 you start working on a higher level script like `process_logs.sh`.
 
-### Fork, clone, and share the project
+### Working with the team repository
 
-_One_ of you should fork the project and then _make sure you add any and all
-group members as collaborators_ so they will be able to commit changes to the
-project.
-
-After that one of you should clone the project to a lab machine so your group
-can begin work.
+When you accept the github assignment you and your team-mates should have access to the same repository.
+It's fine if both group members clone the the project but be sure to **commit often** and you might 
+want to explore the use of `git pull` (or `git fetch` and `git merge`) to make sure everybody's
+cloned repositories match.
 
 ### Directory structure
 
@@ -76,10 +80,10 @@ directory structure we provide includes:
 
 * `bin`: This is where you should put the shell scripts you write. The `bats`
    tests will assume your scripts are there (and executable) and will fail if
-   they aren't.
+   they are not.
 * `test`: This contains the `bats` tests you will be using to test each step
-   of the lab. In theory you shouldn't need to change anything in this
-   directory. You're welcome to extend the tests, but please don't change
+   of the lab. In theory you should not need to change anything in this
+   directory. You are welcome to extend the tests, but please don't change
    them without reason.
 * `log_files`: This has `tar` archives containing some old log files from
    several machines. Unix log files are typically found in `/var/log` which,
@@ -87,11 +91,11 @@ directory structure we provide includes:
    we pulled out some log files from several machines in the lab and made them
    available to you in this directory.
 * `html_components`: This contains the headers and footers that wrap the
-   contents of your data so Google magic can make pretty charts. You shouldn't
+   contents of your data so Google magic can make pretty charts. You should not
    need to change anything in this directory, but your scripts will need to
    use things that are here.
 * `etc`:  Contains miscellaneous files; currently the only thing here is a
-   file that maps IP addresses to their hosting country. Again, you shouldn't
+   file that maps IP addresses to their hosting country. Again, you should not
    need to change anything here, but your scripts will need to use things that
    are here.
 * `examples`: Contains some example files.
@@ -127,7 +131,7 @@ make debugging a lot simpler. So definitely look this over, ask questions, and
 look things up.
 
 As discussed in the
-[prelab](https://github.com/UMM-CSci-Systems/Log-processing-pre-lab), this idea
+[prelab](https://classroom.github.com/a/Rh3iDwZ1), this idea
 of taking some text (e.g., the data for the username pie chart) and wrapping it
 in a header and footer comes up so much in this lab that we pulled it out into a
 separate script `wrap_contents.sh` which you wrote in the pre-lab. One of the
@@ -559,3 +563,5 @@ following files:
 You shouldn't need to change anything in the other folders, but since your code
 depends on them, you should leave them in your project repository for
 completeness.
+
+Be sure to submit a link to your team's repository in Canvas!
