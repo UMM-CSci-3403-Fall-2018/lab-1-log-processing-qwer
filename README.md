@@ -204,7 +204,7 @@ It then:
   directory back up to the directory where `process_logs.sh` was called.
 
 We'll use the `wrap_contents.sh` you wrote in [the
-pre-lab](https://github.com/UMM-CSci-Systems/Log-processing-pre-lab) to simplify
+pre-lab](https://classroom.github.com/a/Rh3iDwZ1) to simplify
 the generation of the desired HTML/JavaScript documents.
 
 We have `bats` tests for each of these shell scripts so you can do them one at
