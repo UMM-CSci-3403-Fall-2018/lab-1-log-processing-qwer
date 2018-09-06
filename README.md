@@ -27,9 +27,9 @@ patterns and/or summarizing behaviors of interest. (This idea of using log analy
 for this lab was suggested by John Wagener, a UMM CSci alum who does this kind
 of processing in his work in security analysis.)
 
-In this lab we will be given a number of (old) `secure` log files from several of
+In this lab we will be given a number of (old, from 2011) `secure` log files from several of
 the lab machines. Our lab uses Redhat Linux and, at the time, essentially anything 
-to do with authentication was store in `/var/log/secure`.  Debian systems used 
+to do with authentication was stored in `/var/log/secure`.  Debian systems used 
 a different, but similar file named `auth.log` and newer Linux systems using `systemd` require 
 the use of a special command called `journalctl` to extract that same information.  However, 
 even if the security information is not stored in one file, per se, the extracted data
@@ -40,7 +40,7 @@ attempts.  We're going to focus on summarizing the unsuccessful login attempts,
 most of which are clearly attempts by hackers to gain access through improperly
 secured accounts. You'll write a collection of shell scripts that go through
 each of the log files, extract the relevant information, and generate HTML and
-JavaScript code that (via Google's nice chart tools) will generate graphs
+JavaScript code that (via Google's chart tools) will generate graphs
 showing:
 
 * A <a href="http://code.google.com/apis/chart/interactive/docs/gallery/piechart.html">pie chart</a> showing the frequency of attacks on various user names.
@@ -67,7 +67,7 @@ you start working on a higher level script like `process_logs.sh`.
 
 ### Working with the team repository
 
-When you accept the github assignment you and your team-mates should have access to the same repository.
+When you accept the GitHub Classroom assignment you and your team-mates should have access to the same repository.
 It's fine if both group members clone the the project but be sure to **commit often** and you might 
 want to explore the use of `git pull` (or `git fetch` and `git merge`) to make sure everybody's
 cloned repositories match.
@@ -86,10 +86,7 @@ directory structure we provide includes:
    directory. You are welcome to extend the tests, but please don't change
    them without reason.
 * `log_files`: This has `tar` archives containing some old log files from
-   several machines. Unix log files are typically found in `/var/log` which,
-   for security reasons, is usually not readable by most users. As a result
-   we pulled out some log files from several machines in the lab and made them
-   available to you in this directory.
+   several machines.
 * `html_components`: This contains the headers and footers that wrap the
    contents of your data so Google magic can make pretty charts. You should not
    need to change anything in this directory, but your scripts will need to
@@ -131,7 +128,7 @@ make debugging a lot simpler. So definitely look this over, ask questions, and
 look things up.
 
 As discussed in the
-[prelab](https://classroom.github.com/a/Rh3iDwZ1), this idea
+[prelab](https://github.com/UMM-CSci-Systems/Log-processing-pre-lab), this idea
 of taking some text (e.g., the data for the username pie chart) and wrapping it
 in a header and footer comes up so much in this lab that we pulled it out into a
 separate script `wrap_contents.sh` which you wrote in the pre-lab. One of the
@@ -151,7 +148,8 @@ scripts (the `bats` tests are functions), but we're choosing to break things up
 into different scripts instead.
 
 There are obviously many different ways to solve this problem, but we propose
-the one described below.
+the one described below and the tests are written assuming you organize your
+solution this way as well.
 
 ### Top-level `process_logs.sh`
 
@@ -159,27 +157,26 @@ We'll start our description with a "top-level" script `process_logs.sh` which is
 what you call to "run the program". This is _not_ where you should start the
 programming, though, because this won't work until all the helper scripts are
 written. So we'll describe it top-down, but you should probably write the
-"helper" scripts (described below) first, and save `process_logs` for last.
+"helper" scripts (described below) first, and save `process_logs.sh` for last.
 
 `process_logs.sh` takes a set of gzipped tar files on the command line, e.g.,
 
 ```bash
-process_logs.sh foo.tgz bar.tgz...
+process_logs.sh this_secure.tgz that_secure.tgz...
 ```
 
-It then:
+where the files have the form `<machine name>_secure.tgz`. The 
+file `toad_secure.tgz` would be a compressed `tar` archive containing 
+the relevent log files from a machine named `toad`.
+
+`process_logs.sh` then:
 
 * Creates a temporary scratch directory to store all the intermediate files in.
 * Loops over the compressed `tar` files provided on the command line,
-  extracting the contents of each file we were given.
+  extracting the contents of each file we were given. See below for more
+  info on the recommended file structure after extracting the log files.
   * The set of files to work with for the lab are in the `log_files`
-    directory of your project.
-  * Our solution extracts the contents of each archive into a directory (in the
-    scratch directory) with the same name as the client in the temporary
-    directory. Thus when you extract the contents of `zeus_secure.tgz` you'd
-    want to put the results in a directory called `zeus` in your scratch
-    directory. Having each in their own directory is important so you can
-    keep the logs from different machines from getting mixed up with each other.
+    directory of your project.  
 * Calls `process_client_logs.sh` on each client's set of logs to generate a
   set of temporary, intermediate files that are documented below. This needs to
   happen once for every set of client logs; you can just do it in the same
@@ -203,46 +200,56 @@ It then:
 * Moves the resulting `failed_login_summary.html` file from the scratch
   directory back up to the directory where `process_logs.sh` was called.
 
+Our solution extracts the contents of each archive into a directory (in the
+scratch directory) with the same name as the client in the temporary
+directory. Thus when you extract the contents of `toad_secure.tgz` you'd
+want to put the results in a directory called `toad` in your scratch
+directory. Having each in their own directory is important so you can
+keep the logs from different machines from getting mixed up with each other.
+
+As an example, assume:
+
+* There are three log files for the machines `duck`, `goose`, and `toad`
+* Each of which had five log files
+* The temporary scratch directory is `/tmp/tmp_logs`.
+
+Then, after extraction, `/tmp/tmp_logs` might look like:
+
+```
+/tmp/tmp_logs/
+├── duck
+│   └── var
+│       └── log
+│           ├── secure
+│           ├── secure-20110723
+│           ├── secure-20110730
+│           ├── secure-20110805
+│           └── secure-20110812
+├── goose
+│   └── var
+│       └── log
+│           ├── secure
+│           ├── secure-20110717
+│           ├── secure-20110803
+│           ├── secure-20110807
+│           └── secure-20110814
+├── toad
+│   └── var
+│       └── log
+│           ├── secure
+│           ├── secure-20110724
+│           ├── secure-20110731
+│           ├── secure-20110807
+│           └── secure-20110814
+```
+
 We'll use the `wrap_contents.sh` you wrote in [the
-pre-lab](https://classroom.github.com/a/Rh3iDwZ1) to simplify
+pre-lab](https://github.com/UMM-CSci-Systems/Log-processing-pre-lab) to simplify
 the generation of the desired HTML/JavaScript documents.
 
 We have `bats` tests for each of these shell scripts so you can do them one at
 time (in the order that they're discussed below) and have some confidence that
 you have one working before you move on to the next.
-
-Note that "real" bash programmers probably wouldn't create this many helper
-scripts, both for cultural reasons and because there is some overhead in having
-one script call another instead of just staying in the original script. bash
-scripting does allow for the definition of functions, which we could use to
-provide this structure for our solution, but that introduces a new set of
-complications, and it's tricky to test the functions independently using the
-testing tools that we have. So we've chosen to do it this way for this lab, but
-would make no claims about this being the "right" or "best" way. In addition,
-this solution creates quite a few temporary files and directories to store
-partial results or intermediate files. Make sure you use `mktemp` to create
-temporary files or directories and then clean up after yourself so you don't end
-up cluttering up the world with zillions of temporary files.
-
-Also, we _totally_ don't make any claims that this is the "best" way (whatever
-that would mean), and we don't have any problems if you choose to blaze another
-trail. We would, however, ask two things before you head off in a new direction.
-First, make sure everyone in your group is cool with the decision to take a
-different approach. It's a really _bad_ idea if one team member pushes the group
-off in a direction only they really understand, as that really undermines
-everyone else in the group and usually means that no one in the group learns
-very much. So if you want to propose an alternative, especially a fairly
-different one, think carefully about _why_ you're proposing it and what impact
-that will have on the learning of the other people in your group. Similarly, if
-someone in your group wants to dash off in a new direction, make sure you
-understand what they're doing and make sure you agree that it's a good idea.
-Make sure you stand up for your right to learn from this experience. One thing
-we would _strongly_ recommend if you go this way is that the person that
-proposed the new approach is _not_ allowed to drive. Having to explain their
-ideas well enough that someone else can type them in and make them work helps
-ensure that everyone "gets it", and if the proposer finds it frustrating to have
-to explain themselves, then that's a _sure_ sign that switching to this new
-approach was probably a bad idea.
 
 ### Write `process_client_logs.sh`
 
@@ -267,7 +274,7 @@ Aug 14 06 root 218.2.129.13
 
 The first three fields are the date and time of the failed login; the third
 field is just the hour because we want to group the failed logins by hour, so
-we'll just strip out the minutes and seconds from the time. The fourth column is
+we'll just drop the minutes and seconds from the time. The fourth column is
 the login name that was used in the failed login attempt. The fifth column is
 the IP address the failed attempt came from. These five pieces of information
 are enough to let us create the desired graphs.
@@ -304,7 +311,8 @@ Aug 14 06:01:39 computer_name sshd[26835]: Failed password for root from 218.2.1
 
 Thus the task for `process_client_logs.sh` is to take all the log files in the
 specified directory, extract all the lines of the two forms illustrated above,
-and extract the five columns we need. Our solution had the following steps:
+and extract the five columns we need. Our solution had the following steps, using
+Unix pipes to take out output of one step and make it the input of the next step:
 
 1. Move to the specified directory.
 2. Gather the contents of all the log files in that directory and pipe
@@ -351,8 +359,8 @@ bats test/create_username_dist.bats
 
 in the top of your project directory.
 
-:ALERT: This script can and should assume that it's being called in your project
-directory, so it can refer to a directory `html_components` which has the
+:warning: This script can and should assume that it's being called in your project
+directory, so it can refer to the directory `html_components` which has the
 header/footer files for this graph, namely
 `html_components/username_dist_header.html` and
 `html_components/username_dist_footer.html`. This means that if you want to just
@@ -464,17 +472,12 @@ graph, and then wrapping it in the country distribution header and footer using
 the summarized `failed_login_data.txt` files. Here, however, we can't just count
 occurrences of different IP addresses, we have to first map the IP addresses to
 countries. There are a number of web services that will attempt (with
-considerable success) to map IP addresses to locations;
-<http://ipinfodb.com/ip_location_api.php>, for example, provides a free API to
-their service. The rub is that you have to register which includes providing
-your e-mail, and we don't have any idea who these people are. The other rub is
-that they build in delays if you make too many requests in a given period of
-time, which slows things down, especially when you're testing. So rather than
-requiring that everyone sign up and give them their info to get an access key,
-we got a key and used it to create a file of IP addresses and countries for all
+considerable success) to map IP addresses to locations. 
+Rather than requiring that everyone sign up for such a service, we signed up
+and created a file of IP addresses and countries for all
 the IP addresses that appear in the data we're using here; we've provided that
 in `etc/country_IP_map.txt`. You can then use this file to map IP addresses to
-countries without having to sign up for their service.
+countries without having to sign up for some service.
 
 The one interesting difference, then, between this and `create_username_dist.sh`
 is the need to convert IP addresses into country codes. Assuming you've
@@ -510,7 +513,7 @@ you've generated above:
 It collects together the contents of those files (we used `cat`) and then uses
 `wrap_contents.sh` to add the overall HTML header and footer, writing the
 results to `failed_login_summary.html` in your scratch directory.
-If you open that file in a reasonably modern browser, you should see three cool
+If you open that file in a browser, you should see three cool
 graphs like in the example above. If one or more of your graphs is missing or
 blank, you might find it useful to open the JavaScript console in your browser
 so you can see the error messages.
@@ -547,21 +550,49 @@ like this, and you should also clean up stuff that you dropped in places like
 files anywhere, so you'll want to think about any temporary directories or files
 you create and then go check by hand that your script removes them.
 
+Note that "real" bash programmers probably wouldn't create this many helper
+scripts, both for cultural reasons and because there is some overhead in having
+one script call another instead of just staying in the original script. bash
+scripting does allow for the definition of functions, which we could use to
+provide this structure for our solution, but that introduces a new set of
+complications, and it's tricky to test the functions independently using the
+testing tools that we have. So we've chosen to do it this way for this lab.
+
+Also, we _totally_ don't make any claims that this is the "best" way (whatever
+that would mean), and we don't have any problems if you choose to blaze another
+trail. We would, however, ask two things before you head off in a new direction.
+First, make sure everyone in your group is cool with the decision to take a
+different approach. It's a really _bad_ idea if one team member pushes the group
+off in a direction only they really understand, as that really undermines
+everyone else in the group and usually means that no one in the group learns
+very much. So if you want to propose an alternative, especially a fairly
+different one, think carefully about _why_ you're proposing it and what impact
+that will have on the learning of the other people in your group. Similarly, if
+someone in your group wants to dash off in a new direction, make sure you
+understand what they're doing and make sure you agree that it's a good idea.
+Make sure you stand up for your right to learn from this experience. One thing
+we would _strongly_ recommend if you go this way is that the person that
+proposed the new approach is _not_ allowed to drive. Having to explain their
+ideas well enough that someone else can type them in and make them work helps
+ensure that everyone "gets it", and if the proposer finds it frustrating to have
+to explain themselves, then that's a _sure_ sign that switching to this new
+approach was probably a bad idea.
+
 ## What to turn in
 
 The `bin` folder in your finished project on Github folder should have the
 following files:
 
-* `assemble_report.sh`
-* `create_country_dist.sh`
-* `create_username_dist.sh`
-* `create_hours_dist.sh`
-* `process_client_logs.sh`
-* `process_logs.sh`
-* `wrap_contents.sh`
+* [ ] `assemble_report.sh`
+* [ ] `create_country_dist.sh`
+* [ ] `create_username_dist.sh`
+* [ ] `create_hours_dist.sh`
+* [ ] `process_client_logs.sh`
+* [ ] `process_logs.sh`
+* [ ] `wrap_contents.sh`
 
 You shouldn't need to change anything in the other folders, but since your code
 depends on them, you should leave them in your project repository for
 completeness.
 
-Be sure to submit a link to your team's repository in Canvas!
+* [ ] Be sure to submit a link to your team's repository in Canvas!
