@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 
 #file containing constants to be wrapped
 file=$1

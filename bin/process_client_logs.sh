@@ -1,7 +1,7 @@
-#! bin/bash
+#!bin/bash
 
 directory=$1
 
-cd directory
+cd $directory
 
-cat *.tgz | 
+cat *.tgz | awk 'BEGIN{FS="|"} $1 == "Failed password" { print NR " " $1 " " $2 " " $3 " " $9 " " $11}' 
