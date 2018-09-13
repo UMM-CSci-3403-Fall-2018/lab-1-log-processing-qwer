@@ -11,9 +11,10 @@ mkdir tmp/tmp_logs
 # extraction for loop (I am using a stupid method but it works LOL)
 for f in $FILES
 do
-    mkdir tmp/tmp_logs/${f:10:-11}
-    tar -xzvf $f -C tmp/tmp_logs/${f:10:-11}
-    bin/process_client_logs.sh tmp/tmp_logs/${f:10:-11}
+    FILE="$(basename -s .tgz $f)"
+    mkdir tmp/tmp_logs/$FILE
+    tar -xzvf $f -C tmp/tmp_logs/$FILE
+    bin/process_client_logs.sh tmp/tmp_logs/$FILE
 done
 
 # call previous helper functions
